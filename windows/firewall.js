@@ -5,7 +5,13 @@
 // Firewall self-check: the network must be Private, an enabled inbound allow rule for
 // this electron.exe must cover it, and no block rule may apply. Fix adds the rule (and makes the
 // LAN Private) with one elevated PowerShell (one UAC prompt).
-const { run: powershell, runElevated, q } = require('./ps');
+const { runElevated, q } = require('./ps');
+const os = require('os');
+const path = require('path');
+
+// The elevated PowerShell may run under a different account (UAC asks for admin credentials),
+// so the file is written where the *logged-in* user's temp dir is and the path is passed in.
+const STATUS_FILE = path.join(os.tmpdir(), 'twindesk-fw-status.json');
 
 const statusScript = (exe) => `
 $ErrorActionPreference = 'SilentlyContinue'
@@ -20,7 +26,7 @@ foreach ($f in @(Get-NetFirewallApplicationFilter | Where-Object { $_.Program -e
 $nets = @(Get-NetConnectionProfile | ForEach-Object {
   [pscustomobject]@{ alias = $_.InterfaceAlias; index = [int]$_.InterfaceIndex; category = [string]$_.NetworkCategory; ipv4 = [string]$_.IPv4Connectivity }
 })
-[pscustomobject]@{ rules = @($rules); networks = $nets } | ConvertTo-Json -Depth 4 -Compress | Out-File -FilePath 'C:/Users/Parspano/AppData/Local/Temp/opencode/twindesk-fw-status.json' -Encoding utf8
+[pscustomobject]@{ rules = @($rules); networks = $nets } | ConvertTo-Json -Depth 4 -Compress | Out-File -FilePath ${q(STATUS_FILE)} -Encoding utf8
 `;
 
 const arr = (v) => (Array.isArray(v) ? v : v ? [v] : []);
@@ -53,7 +59,7 @@ async function check(exe = process.execPath) {
     await runElevated(statusScript(exe));
     const fs = require('fs');
     let raw = '{}';
-    try { raw = fs.readFileSync('C:/Users/Parspano/AppData/Local/Temp/opencode/twindesk-fw-status.json', 'utf8').replace(/^\ufeff/, ''); } catch (e) { raw = '{}'; }
+    try { raw = fs.readFileSync(STATUS_FILE, 'utf8').replace(/^\ufeff/, ''); } catch (e) { raw = '{}'; }
     return { ...interpret(JSON.parse(raw || '{}')), checkedAt: Date.now() };
   } catch (e) {
     return { ok: false, message: 'Couldn’t check the firewall: ' + e.message, error: true, checkedAt: Date.now() };
