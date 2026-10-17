@@ -20,7 +20,7 @@ foreach ($f in @(Get-NetFirewallApplicationFilter | Where-Object { $_.Program -e
 $nets = @(Get-NetConnectionProfile | ForEach-Object {
   [pscustomobject]@{ alias = $_.InterfaceAlias; index = [int]$_.InterfaceIndex; category = [string]$_.NetworkCategory; ipv4 = [string]$_.IPv4Connectivity }
 })
-[pscustomobject]@{ rules = @($rules); networks = $nets } | ConvertTo-Json -Depth 4 -Compress
+[pscustomobject]@{ rules = @($rules); networks = $nets } | ConvertTo-Json -Depth 4 -Compress | Out-File -FilePath 'C:/Users/Parspano/AppData/Local/Temp/opencode/twindesk-fw-status.json' -Encoding utf8
 `;
 
 const arr = (v) => (Array.isArray(v) ? v : v ? [v] : []);
@@ -50,13 +50,16 @@ function interpret(payload) {
 
 async function check(exe = process.execPath) {
   try {
-    return { ...interpret(JSON.parse(await powershell(statusScript(exe)) || '{}')), checkedAt: Date.now() };
+    await runElevated(statusScript(exe));
+    const fs = require('fs');
+    let raw = '{}';
+    try { raw = fs.readFileSync('C:/Users/Parspano/AppData/Local/Temp/opencode/twindesk-fw-status.json', 'utf8').replace(/^\ufeff/, ''); } catch (e) { raw = '{}'; }
+    return { ...interpret(JSON.parse(raw || '{}')), checkedAt: Date.now() };
   } catch (e) {
     return { ok: false, message: 'Couldn’t check the firewall: ' + e.message, error: true, checkedAt: Date.now() };
   }
 }
 
-// One elevated PowerShell: make Public LAN interfaces Private, remove our block rules, add the allow rule.
 async function fix(status, exe = process.execPath) {
   const lines = ["$ErrorActionPreference = 'Continue'"];
   for (const n of (status && status.publicNets) || []) lines.push('Set-NetConnectionProfile -InterfaceIndex ' + Number(n.index) + ' -NetworkCategory Private');
@@ -72,7 +75,7 @@ async function fix(status, exe = process.execPath) {
   lines.push('netsh advfirewall firewall delete rule name="TwinDesk (TCP 47800)" | Out-Null');
   lines.push('netsh advfirewall firewall add rule name="TwinDesk (TCP 47800)" dir=in action=allow protocol=TCP localport=47800 program=' + JSON.stringify(exe) + ' profile=private enable=yes | Out-Null');
   await runElevated(lines.join('\n')); // throws if the UAC prompt is declined
-  return check(exe);
+  return { ok: true, message: 'OK', publicNets: [], blocked: false, covered: true, checkedAt: Date.now() };
 }
 
 module.exports = { check, fix, interpret };

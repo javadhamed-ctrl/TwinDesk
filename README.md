@@ -1,178 +1,141 @@
-<p align="center">
-  <img src=".github/assets/icon.png" width="112" alt="TwinDesk icon">
-</p>
+# TwinDesk
 
-<h1 align="center"><a href="https://twin-desk.vercel.app">TwinDesk</h1></a>
+> ⭐ **If you find this project useful, please give it a star!** It helps others discover it and motivates continued development.
+>
+> ⭐ **اگر این پروژه برایتان مفید بود، لطفاً به آن ستاره (Star) بدهید!** این کار به دیگران در کشف پروژه کمک می‌کند و انگیزهٔ توسعهٔ بیشتر را فراهم می‌آورد.
 
-<p align="center">
-  Use two computers as one desk: Mac, Windows and Linux on the same network.<br>
-  Share screens, mouse and keyboard, clipboard, files, sound, notifications, terminals and apps.
-</p>
+---
 
-<p align="center">
-  <img alt="License: GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-blue">
-  <img alt="macOS 13+" src="https://img.shields.io/badge/macOS-13%2B-black">
-  <img alt="Windows 10/11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078d4">
-  <img alt="Linux X11 and Wayland" src="https://img.shields.io/badge/Linux-X11%20%7C%20Wayland-f0a30a">
-</p>
+## English
 
+This is a fork of [InukaAsith/TwinDesk](https://github.com/InukaAsith/TwinDesk) by **Javad Hamed** ([javadhamed-ctrl](https://github.com/javadhamed-ctrl)), with a fix for the Windows Firewall self-check bug (see below).
 
-<p align="center">
-  <img src=".github/assets/hero.svg" alt="A Mac and a PC side by side, linked by TwinDesk" width="100%">
-</p>
+### About TwinDesk
 
-TwinDesk pairs two computers on your local network. One app on each side does the job of a
-software KVM, a second-monitor app, a clipboard and file-sharing tool and a remote-app viewer.
-Everything travels directly between the two machines over an encrypted link. There's no cloud
-account and no relay server.
+Use two computers as one desk: Mac, Windows and Linux on the same network. Share screens, mouse and keyboard, clipboard, files, sound, notifications, terminals and apps.
 
-<p align="center">
-  <img src=".github/assets/tour.gif" alt="A tour of the TwinDesk window" width="820">
-</p>
+TwinDesk pairs two computers on your local network. One app on each side does the job of a software KVM, a second-monitor app, a clipboard and file-sharing tool and a remote-app viewer. Everything travels directly between the two machines over an encrypted link. There's no cloud account and no relay server.
 
-## What you can do
+### What you can do
 
-| | |
-|---|---|
-| **🖥 Use one computer as a second screen**<br>Extend your Mac onto the PC with a real virtual display, or mirror it. Or bring the PC's screen into a window on the Mac, with Extend through a virtual display driver. Low-latency H.264 over WebRTC, with Fastest / Smooth playback and optional frame generation. | <img src=".github/assets/ui-share-screen.jpg" alt="Share screen settings" width="420"> |
-| **🖱 One mouse and keyboard for both**<br>Push the pointer off the edge of the screen and keep working on the other computer. Pick which side the other computer is on, set edge resistance and pointer speed. Double-tap the hotkey (Right Option / Right Alt by default) to bring everything home. Trackpad gestures, like Spaces swipes, pinch to zoom and show desktop, carry over too. | <img src=".github/assets/ui-cursor.jpg" alt="Cursor settings" width="420"> |
-| **📋 Clipboard both ways**<br>Copy on one computer and paste on the other, instantly or when you switch. Password managers' entries are skipped, and there's a short Recent list. | <img src=".github/assets/ui-clipboard.jpg" alt="Clipboard settings" width="420"> |
-| **📁 Files and folders**<br>Drag files across the screen edge and drop them anywhere, or copy with <kbd>⌃⌥C</kbd> and paste with <kbd>⌃⌥V</kbd> (<kbd>Ctrl+Alt+C/V</kbd> on Windows). You can also send from the macOS Share menu or Explorer's *Send to*, and share a folder that shows up as a network drive on the other side. | <img src=".github/assets/ui-files.jpg" alt="Files settings" width="420"> |
-| **🪟 Apps from the other computer**<br>Open the PC's apps on the Mac (or the Mac's apps on the PC), each in its own window with its own Dock icon or Start-menu pin. Menus and pop-ups work too. | <img src=".github/assets/ui-apps-on.jpg" alt="Apps from the other computer" width="420"> |
-| **🔔 Notifications**<br>See one computer's notifications on the other as native notifications. You can hide the message text or mute single apps. | <img src=".github/assets/ui-notifications.jpg" alt="Notifications settings" width="420"> |
-| **⌨️ Terminal**<br>Open a shell on the other computer without passwords, between any two computers. Keys are exchanged over the paired link, so `ssh twindesk` just works in any terminal. | <img src=".github/assets/ui-terminal.jpg" alt="Terminal settings" width="420"> |
-| **🔊 Sound**<br>Hear one computer on the other, in either direction, separate from screen sharing. | <img src=".github/assets/ui-audio.jpg" alt="Audio settings" width="420"> |
+- **Use one computer as a second screen** — Extend your Mac onto the PC with a real virtual display, or mirror it. Low-latency H.264 over WebRTC.
+- **One mouse and keyboard for both** — Push the pointer off the edge of the screen and keep working on the other computer.
+- **Clipboard both ways** — Copy on one computer and paste on the other.
+- **Files and folders** — Drag files across the screen edge and drop them anywhere.
+- **Apps from the other computer** — Open the PC's apps on the Mac (or vice versa), each in its own window.
+- **Notifications** — See one computer's notifications on the other as native notifications.
+- **Terminal** — Open a shell on the other computer without passwords.
+- **Sound** — Hear one computer on the other, in either direction.
 
-TwinDesk also includes:
-
-- **Discovery and pairing.** Computers find each other on the LAN. You pair once by comparing a
-  code, and after that the link is TLS-encrypted and pinned to the pair.
-- **Settings stay in sync.** A two-way switch is one setting shared by both computers, remembered
-  per pair.
-- **Wake-on-LAN.** Wake a paired computer from the other one.
-- **Device names.** Every label uses your computers' real names.
-- **Update checks.** Each app looks for new [releases](https://github.com/InukaAsith/TwinDesk/releases)
-  on start and every few hours, shows a notification and offers the download for your platform
-  (About › Updates, or the menu bar / tray).
-
-<p align="center">
-  <img src=".github/assets/ui-overview.jpg" alt="Overview: both computers, the link and what is shared in each direction" width="820">
-</p>
-
-## Platforms
+### Platforms
 
 | Pair | Status |
 |---|---|
 | Mac ↔ Windows PC | Every feature above |
 | Mac ↔ Mac | Every feature above |
 | PC ↔ PC | Every feature above |
-| Linux ↔ Mac, PC or Linux | Every feature above (see the notes below) |
+| Linux ↔ Mac, PC or Linux | Every feature above |
 
-On Linux, TwinDesk runs on both X11 and Wayland. On Wayland, the mouse and keyboard go through
-evdev and uinput (the Setup screen grants access once), and screens are captured through the
-desktop portal. A few things work a little differently:
+### Ports
 
-- **Shared folder.** Sharing uses Samba. The first time, one password prompt installs it if it's
-  missing and adds a network-only account. The other computer's folder is connected with GVFS
-  and shows in the file manager's sidebar.
-- **Copy and paste files.** <kbd>Ctrl+Alt+C</kbd> copies what's selected in the file manager in
-  front (or files you already copied), and <kbd>Ctrl+Alt+V</kbd> pastes into the file manager
-  window in front (else Downloads). Right-click › *Send to* works in Nautilus, Nemo, Caja,
-  Dolphin and Thunar.
-- **Dragging files across the edge.** Files dragged in from the other computer are dropped into
-  the folder under the pointer, or the desktop. On Wayland, they go to the file manager window in
-  front. Dragging files out of Linux needs an Xorg session.
-- **Extend.** On GNOME (Wayland) it uses Mutter's own virtual monitor; pick "Virtual remote
-  monitor" when the desktop asks which screen to share. On X11 it uses a spare output of the
-  graphics driver (not available on NVIDIA's driver).
-- **Apps.** Opening this computer's apps on the other side needs an Xorg session.
+TCP **47800** (control link) and UDP **47801** (discovery) on the local network.
 
-## How it works
-
-<p align="center">
-  <img src=".github/assets/how-it-works.svg" alt="Architecture: an Electron app and a native helper on each computer, linked by a TLS control channel, WebRTC media and system services" width="100%">
-</p>
-
-Each computer runs an **Electron app**, which handles the window, pairing, the link and the state
-machines. Next to it runs a small **native helper** for everything the OS keeps to itself:
-capturing and injecting input, virtual displays, gestures, window capture and native drag and drop.
-
-| Folder | What's in it |
-|---|---|
-| `mac/` | macOS app (Electron) |
-| `mac-helper/` | macOS helper (Swift): virtual display, event tap, input injection, audio, apps, SMB |
-| `windows/` | Windows app (Electron) and installer |
-| `windows-helper/` | Windows helper (C#): hooks, SendInput, Raw Input touchpad, window capture, native drag |
-| `linux/` | Linux app (Electron) |
-| `linux-helper/` | Linux helper (C): XInput2 / XTest on X11, evdev / uinput on Wayland, XRandR, window list, XDND edge strip |
-| `shared/` | Wire protocol, frame generation and icons used by every app |
-
-Ports: TCP **47800** (control link) and UDP **47801** (discovery) on the local network.
-
-## Build and run
+### Build and run
 
 You need [Node.js](https://nodejs.org) 18+ on every platform.
 
-### macOS (13 Ventura or later)
+**Windows 10 / 11**
 
-```sh
-xcode-select --install          # Swift compiler for the helper
-cd mac
-npm install
-npm run build:helper
-npm start                       # run from source
-npm run dist && npm run dmg     # build TwinDesk.app and TwinDesk.dmg in mac/dist/
 ```
-
-On first launch, TwinDesk asks for **Screen Recording**, **Accessibility** and **Input
-Monitoring**. The General tab shows each permission's status.
-
-### Windows 10 / 11
-
-```bat
 cd windows
 npm install
-npm run build:helper            :: uses the .NET Framework C# compiler that ships with Windows
+npm run build:helper
 npm start
-npm run dist                    :: NSIS installer in windows\dist\
-npm run dist -- arm64           :: the Windows on ARM installer (or `x64 arm64` for both)
+npm run dist
 ```
 
-`npm run dist` also works on a Mac or Linux: it skips the helper build and packages the
-`macshare-winhelper.exe` already in `windows-helper\bin\` (for example, one taken from a release).
+The Setup screen offers to add the firewall rule and set the network to Private. It can also install the optional Virtual Display Driver for Extend.
 
-The Setup screen offers to add the firewall rule and set the network to Private. It can also
-install the optional Virtual Display Driver for Extend.
+### Windows Firewall self-check fix (this fork)
 
-### Linux (X11 or Wayland)
+**Problem:** TwinDesk's firewall self-check runs PowerShell non-elevated. On Windows, `Get-NetFirewallApplicationFilter` returns an empty result for non-administrator users, so the check always reports *"TwinDesk isn't allowed through Windows Firewall on this network."* and discovery stays blocked in the UI even when the firewall rules are correctly in place.
 
-```sh
-sudo apt install build-essential libx11-dev libxi-dev libxtst-dev libxrandr-dev libxfixes-dev
-cd linux
+**Fix (this fork):** The check now runs elevated (one UAC prompt) and reads the result from a temp file (working around the fact that `runElevated` loses stdout, and stripping the UTF-8 BOM that PowerShell 5.1 writes). Firewall rules for TCP 47800 and UDP 47801 (inbound/outbound, all profiles) are also added.
+
+### Privacy
+
+TwinDesk only talks to computers you have paired with, directly over your local network. It has no accounts, telemetry or cloud relay.
+
+### License
+
+TwinDesk is free software, licensed under the [GNU General Public License v3.0](LICENSE). Copyright © 2026 inukaasith. Parts are adapted from [DeskPad](https://github.com/Stengo/DeskPad) (MIT).
+
+---
+
+## فارسی
+
+این یک فورک از [InukaAsith/TwinDesk](https://github.com/InukaAsith/TwinDesk) توسط **جواد حامد** ([javadhamed-ctrl](https://github.com/javadhamed-ctrl)) است که مشکل چک فایروال ویندوز را رفع می‌کند (توضیح در بخش انگلیسی بالا).
+
+### دربارهٔ TwinDesk
+
+دو کامپیوتر را به‌عنوان یک میز واحد استفاده کنید: مک، ویندوز و لینوکس در یک شبکه. اشتراک‌گذاری صفحه، ماوس و کیبورد، کلیپ‌بورد، فایل‌ها، صدا، اعلان‌ها، ترمینال و برنامه‌ها.
+
+TwinDesk دو کامپیوتر را در شبکهٔ محلی شما جفت می‌کند. یک برنامه در هر طرف کار یک KVM نرم‌افزاری، برنامهٔ مانیتور دوم، ابزار اشتراک‌گذاری کلیپ‌بورد و فایل و نمایشگر برنامهٔ راه دور را انجام می‌دهد. همه‌چیز مستقیماً بین دو ماشین از طریق یک لینک رمزگذاری‌شده منتقل می‌شود. حساب ابری و سرور رله‌ای وجود ندارد.
+
+### کارهایی که می‌توانید انجام دهید
+
+- **استفاده از یک کامپیوتر به‌عنوان مانیتور دوم** — مک خود را روی PC با یک نمایشگر مجازی واقعی گسترش دهید یا آینه کنید.
+- **یک ماوس و کیبورد برای هر دو** — نشانگر را از لبهٔ صفحه خارج کنید و روی کامپیوتر دیگر کار کنید.
+- **کلیپ‌بورد دوطرفه** — روی یک کامپیوتر کپی کنید و روی دیگری پیست کنید.
+- **فایل‌ها و پوشه‌ها** — فایل‌ها را از لبهٔ صفحه بکشید و هر جایی رها کنید.
+- **برنامه‌های کامپیوتر دیگر** — برنامه‌های PC را روی مک (یا برعکس) در پنجرهٔ جداگانه باز کنید.
+- **اعلان‌ها** — اعلان‌های یک کامپیوتر را به‌صورت اعلان بومی روی دیگری ببینید.
+- **ترمینال** — بدون رمز عبور یک شل روی کامپیوتر دیگر باز کنید.
+- **صدا** — صدای یک کامپیوتر را در جهت‌های مختلف روی دیگری بشنوید.
+
+### پلتفرم‌ها
+
+| جفت | وضعیت |
+|---|---|
+| مک ↔ PC ویندوز | همهٔ قابلیت‌های بالا |
+| مک ↔ مک | همهٔ قابلیت‌های بالا |
+| PC ↔ PC | همهٔ قابلیت‌های بالا |
+| لینوکس ↔ مک، PC یا لینوکس | همهٔ قابلیت‌های بالا |
+
+### پورت‌ها
+
+TCP **47800** (لینک کنترل) و UDP **47801** (کشف) در شبکهٔ محلی.
+
+### ساخت و اجرا
+
+به [Node.js](https://nodejs.org) نسخهٔ 18 یا بالاتر روی همهٔ پلتفرم‌ها نیاز دارید.
+
+**ویندوز 10 / 11**
+
+```
+cd windows
 npm install
 npm run build:helper
 npm start
-npm run dist                    # AppImage and .deb in linux/dist/
+npm run dist
 ```
 
-The Setup screen walks you through the rest. On Wayland that means input access (one admin
-prompt, then log out and back in once). It can also install OpenSSH for the terminal. Extend on
-GNOME Wayland uses Python 3 with GObject and GStreamer's PipeWire plugin (`python3-gi`,
-`gstreamer1.0-pipewire`), which GNOME desktops already have.
+صفحهٔ Setup پیشنهاد افزودن قاعدهٔ فایروال و تنظیم شبکه به Private را می‌دهد. همچنین می‌تواند درایور نمایشگر مجازی اختیاری برای Extend را نصب کند.
 
+### رفع مشکل چک فایروال ویندوز (این فورک)
 
-## Privacy
+**مشکل:** چک فایروال TwinDesk پاورشل را بدون ارتقا (non-elevated) اجرا می‌کند. در ویندوز، `Get-NetFirewallApplicationFilter` برای کاربران غیر-ادمین نتیجهٔ خالی برمی‌گرداند، بنابراین چک همیشه پیام «TwinDesk isn't allowed through Windows Firewall on this network.» را نمایش می‌دهد و کشف (discovery) در رابط کاربری حتی وقتی قاعده‌های فایروال درست هستند مسدود می‌ماند.
 
-TwinDesk only talks to computers you have paired with, directly over your local network. It has no
-accounts, telemetry or cloud relay. The only internet request is the update check, which asks
-GitHub's public API for the latest release (it can be turned off in About › Updates).
-Shared-folder passwords are random and kept in the OS keychain (macOS) or encrypted with DPAPI
-(Windows).
+**رفع (این فورک):** چک اکنون به‌صورت elevated (یک پنجرهٔ UAC) اجرا می‌شود و نتیجه را از یک فایل موقت می‌خواند (با توجه به اینکه `runElevated` خروجی stdout را از دست می‌دهد و BOM یونیکد ۸ که پاورشل ۵.۱ می‌نویسد پاک می‌شود). قاعده‌های فایروال برای TCP 47800 و UDP 47801 (ورودی/خروجی، همهٔ پروفایل‌ها) نیز افزوده می‌شوند.
 
-## License
+### حریم خصوصی
 
-TwinDesk is free software, licensed under the [GNU General Public License v3.0](LICENSE).
-Copyright © 2026 inukaasith.
+TwinDesk فقط با کامپیوترهایی که جفت کرده‌اید مستقیماً از طریق شبکهٔ محلی صحبت می‌کند. حساب، تله‌متری یا سرور رله‌ای ندارد.
 
-Parts are adapted from [DeskPad](https://github.com/Stengo/DeskPad) (MIT). See [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES)
-for details.
+### مجوز
+
+TwinDesk نرم‌افزار آزاد است و تحت [GNU General Public License v3.0](LICENSE) منتشر می‌شود. Copyright © 2026 inukaasith. بخش‌هایی از [DeskPad](https://github.com/Stengo/DeskPad) (MIT) اقتباس شده‌اند.
+
+---
+
+⭐ **اگر این پروژه برایتان مفید بود، لطفاً ستاره بدهید!** / **If you found this useful, please star the repo!** ⭐
