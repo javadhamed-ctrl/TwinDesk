@@ -193,7 +193,7 @@ for details.
 
 **Problem:** TwinDesk's firewall self-check runs PowerShell non-elevated. On Windows, `Get-NetFirewallApplicationFilter` returns an empty result for non-administrator users, so the check always reports *"TwinDesk isn't allowed through Windows Firewall on this network."* and discovery stays blocked in the UI even when the firewall rules are correctly in place.
 
-**Fix (this fork):** The check now runs elevated (one UAC prompt) and reads the result from a temp file (working around the fact that `runElevated` loses stdout, and stripping the UTF-8 BOM that PowerShell 5.1 writes). Firewall rules for TCP 47800 and UDP 47801 (inbound/outbound, all profiles) are also added.
+**Fix (this fork):** The check now runs elevated (one UAC prompt) and reads the result from a temp file in the logged-in user's temp directory (working around the fact that `runElevated` loses stdout, and stripping the UTF-8 BOM that PowerShell 5.1 writes). That path is resolved at runtime rather than hardcoded, so the check works on every user account, including when UAC elevates into a different admin account. If the elevated run produces no result, the app now says the state is unknown instead of reporting the firewall as blocked. **Fix** adds two inbound rules on the Private profile — one for the app itself and one for TCP 47800 — and switches Public LAN interfaces to Private.
 
 ---
 
