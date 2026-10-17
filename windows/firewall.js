@@ -55,11 +55,20 @@ function interpret(payload) {
 }
 
 async function check(exe = process.execPath) {
+  const fs = require('fs');
   try {
+    // Deleted first: if the elevated script can't write, a file left over from an earlier run would
+    // otherwise be read back and reported as a current, plausible-looking result.
+    fs.rmSync(STATUS_FILE, { force: true });
     await runElevated(statusScript(exe));
-    const fs = require('fs');
-    let raw = '{}';
-    try { raw = fs.readFileSync(STATUS_FILE, 'utf8').replace(/^\ufeff/, ''); } catch (e) { raw = '{}'; }
+    let raw;
+    try {
+      raw = fs.readFileSync(STATUS_FILE, 'utf8').replace(/^\ufeff/, '');
+    } catch (e) {
+      // error:true keeps this off the firewall fix list (missing() in main.js): the check itself
+      // failed, so the state is unknown — calling it blocked would be a guess.
+      return { ok: false, error: true, message: 'The administrator check returned no result (' + (e.code || e.message) + '), so the firewall state is unknown.', checkedAt: Date.now() };
+    }
     return { ...interpret(JSON.parse(raw || '{}')), checkedAt: Date.now() };
   } catch (e) {
     return { ok: false, message: 'Couldn’t check the firewall: ' + e.message, error: true, checkedAt: Date.now() };

@@ -83,7 +83,8 @@ UI.tab({
     const ipRow = UI.row('Connect by address', '', [ipInput, ipBtn]);
 
     // ---- found nearby (always visible) ----
-    const discRow = UI.row('Can’t look for computers on this network.', '', [UI.button('Fix firewall', () => api.fixFirewall(), 'small')]);
+    const fwBtn = UI.button('Fix firewall', () => api.fixFirewall(), 'small');
+    const discRow = UI.row('Can’t look for computers on this network.', '', [fwBtn]);
     const foundList = el('div');
     const refresh = UI.button('Refresh', () => api.refreshFound(), 'small');
 
@@ -131,10 +132,13 @@ UI.tab({
 
       // found nearby
       const d = s.discovery || { on: true, error: '' };
-      const fwBad = s.firewall && s.firewall.ok === false && !s.firewall.checking;
+      const fw = s.firewall || {};
+      const fwBad = fw.ok === false && !fw.checking;
       const blocked = !d.on || fwBad;
       discRow.hidden = !blocked;
-      discRow.setHint(!d.on ? d.error + '. Connect by address still works.' : 'The firewall blocks it. Connect by address may still work.');
+      discRow.setHint(!d.on ? d.error + '. Connect by address still works.'
+        : fw.error ? fw.message : 'The firewall blocks it. Connect by address may still work.');
+      fwBtn.hidden = !fwBad || !!fw.error; // nothing to fix if the check never came back
       // Paired both ways: the computer we connect to (s.paired) and the ones that connect to us (s.guests).
       const known = new Set([...(s.paired ? [s.paired.macId] : []), ...s.guests.map((g) => g.id)]);
       const live = s.peer && connected ? s.peer.id : '';
