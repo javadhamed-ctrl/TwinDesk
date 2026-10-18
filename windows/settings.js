@@ -76,7 +76,10 @@ function normalize(s) {
       receive: bool(audio.receive, true), // play the Mac's sound here (audio.policy W→M)
       volume: Math.round(num(audio.volume, 1, 0, 1) * 100) / 100,
       send: bool(audio.send, false), // send this PC's sound to the Mac (dir w2m)
-      muteLocal: bool(audio.muteLocal, false), // silence this PC while sending
+      // Silence this PC while sending. On by default: the WASAPI loopback captures whatever the
+      // speakers play, so playing the peer's sound here while sending closes an acoustic feedback
+      // loop (a rising screech). The Mac mutes the same way (audiohub.js applyMute).
+      muteLocal: bool(audio.muteLocal, true),
     },
     terminal: {
       enabled: bool(term.enabled, false), // shell on the Mac from this PC
