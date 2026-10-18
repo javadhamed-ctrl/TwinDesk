@@ -84,11 +84,13 @@ async function fix(status, exe = process.execPath) {
   }
   lines.push('netsh advfirewall firewall delete rule name="MacShare" | Out-Null'); // the app's old name
   lines.push('netsh advfirewall firewall delete rule name="MacShare (TCP 47800)" | Out-Null');
-  lines.push('netsh advfirewall firewall delete rule name="TwinDesk" program=' + JSON.stringify(exe) + ' | Out-Null');
-  lines.push('netsh advfirewall firewall add rule name="TwinDesk" dir=in action=allow program=' + JSON.stringify(exe) + ' profile=private enable=yes | Out-Null');
+  // q(), not JSON.stringify(): netsh stores the program path literally, so JSON's \\ would be saved
+  // as a doubled backslash, the rule would match no executable, and the check would stay red.
+  lines.push('netsh advfirewall firewall delete rule name="TwinDesk" program=' + q(exe) + ' | Out-Null');
+  lines.push('netsh advfirewall firewall add rule name="TwinDesk" dir=in action=allow program=' + q(exe) + ' profile=private enable=yes | Out-Null');
   // This PC also listens (PC ↔ PC host), so the port gets its own rule.
   lines.push('netsh advfirewall firewall delete rule name="TwinDesk (TCP 47800)" | Out-Null');
-  lines.push('netsh advfirewall firewall add rule name="TwinDesk (TCP 47800)" dir=in action=allow protocol=TCP localport=47800 program=' + JSON.stringify(exe) + ' profile=private enable=yes | Out-Null');
+  lines.push('netsh advfirewall firewall add rule name="TwinDesk (TCP 47800)" dir=in action=allow protocol=TCP localport=47800 program=' + q(exe) + ' profile=private enable=yes | Out-Null');
   await runElevated(lines.join('\n')); // throws if the UAC prompt is declined
   return { ok: true, message: 'OK', publicNets: [], blocked: false, covered: true, checkedAt: Date.now() };
 }
